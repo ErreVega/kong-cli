@@ -21,7 +21,6 @@ func TablePrint[T any](obj []T, fields ...string) {
 		bodyElem := ""
 		for _, field := range fields {
 			value := getField(&element, field)
-
 			bodyElem += value + "\t"
 		}
 

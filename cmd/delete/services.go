@@ -1,7 +1,6 @@
-package create
+package delete
 
 import (
-	"encoding/json"
 	"fmt"
 	"kong-cli/cmd/get"
 	"kong-cli/utils"
@@ -11,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-var create_services = &cobra.Command{
+var delete_services = &cobra.Command{
 	Use:   "services",
 	Short: "list all kong services",
 	Long: `This command retrieves all kong services in a table. You can chosse what fields to get with --all
@@ -41,7 +40,6 @@ url					shorthand-attribute	Shorthand attribute to set protocol, host, port and 
 	//	Example: "kong-cli services",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var url string = utils.Config.GetUrl() + "/services"
 		res := get.ServiceStruct{}
 
 		//read file
@@ -58,20 +56,18 @@ url					shorthand-attribute	Shorthand attribute to set protocol, host, port and 
 			fmt.Fprintln(os.Stderr, err)
 			os.Exit(1)
 		}
-		//parse struc to JSON binary
-		b, err2 := json.Marshal(res)
+		fmt.Println(res.ID)
+		fmt.Println(res.Name)
 
-		if err2 != nil {
-			fmt.Fprintln(os.Stderr, err2)
-			os.Exit(1)
-		}
+		var url string = utils.Config.GetUrl() + "/services/" + res.Name
 
 		//HTTP Call
-		err = utils.GetJson(url, utils.POST, &res, string(b))
+		err = utils.GetJson(url, utils.DELETE, &res, "")
 
 		table := []get.ServiceStruct{res}
+
 		if err != nil {
-			fmt.Fprintln(os.Stderr, "Could not create")
+			fmt.Fprintln(os.Stderr, "Could not delete")
 			fmt.Fprintln(os.Stderr, err)
 		} else {
 		}
@@ -82,6 +78,6 @@ url					shorthand-attribute	Shorthand attribute to set protocol, host, port and 
 
 func init() {
 
-	Create.AddCommand(create_services)
+	Delete.AddCommand(delete_services)
 
 }

@@ -1,7 +1,6 @@
 package get
 
 import (
-	"kong-cli/config"
 	"kong-cli/utils"
 
 	"strings"
@@ -45,9 +44,9 @@ var get_routes = &cobra.Command{
 	//	Example: "kong-cli services",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		var url string = config.Config.GetUrl() + "/routes"
+		var url string = utils.Config.GetUrl() + "/routes"
 		res := routeStruct{}
-		utils.GetJson(url, &res)
+		utils.GetJson(url, utils.GET, &res, "")
 
 		switch FieldsFlag {
 		case "":
